@@ -33,7 +33,7 @@ public class TodoService {
 
     @Transactional
     public TodoSaveResponse saveTodo(AuthUser authUser, TodoSaveRequest todoSaveRequest) {
-        User user = userRepository.findByEmail(authUser.getEmail())
+        User user = userRepository.findById(authUser.getId())
                 .orElseGet(() -> userRepository.save(User.fromAuthUser(authUser)));
 
         String weather = weatherClient.getTodayWeather();

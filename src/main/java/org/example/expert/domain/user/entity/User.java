@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.entity.Timestamped;
+import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.user.enums.UserRole;
-import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 @Entity
@@ -34,23 +34,18 @@ public class User extends Timestamped {
         this.userRole = userRole;
     }
 
-    public User(String email, String nickname, UserRole userRole) {
+    public User(Long id, String email, String nickname, UserRole userRole) {
+        this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.userRole = userRole;
     }
 
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getEmail(),
-                authUser.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .findFirst()
-                        .orElseThrow(),
-                authUser.getNickName(),
-                UserRole.of(authUser.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .findFirst()
-                        .orElseThrow()));
+        if (authUser == null) {
+            throw new InvalidRequestException("유효하지 않은 사용자 정보입니다.");
+        }
+        return new User(authUser.getId(), authUser.getEmail(), authUser.getNickName(), authUser.getUserRole());
     }
 
     public void changePassword(String password) {

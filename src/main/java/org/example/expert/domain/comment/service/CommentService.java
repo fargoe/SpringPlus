@@ -33,7 +33,7 @@ public class CommentService {
     public CommentSaveResponse saveComment(long todoId, CommentSaveRequest commentSaveRequest) {
         AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userRepository.findByEmail(authUser.getEmail())
+        User user = userRepository.findById(authUser.getId())
                 .orElseGet(() -> userRepository.save(User.fromAuthUser(authUser)));
 
         Todo todo = todoRepository.findById(todoId).orElseThrow(() ->

@@ -53,7 +53,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
             Claims claims = jwtUtil.extractClaims(jwt);
             Long userId = Long.valueOf(claims.getSubject());
             String email = claims.get("email", String.class);
-            UserRole userRole = UserRole.of(claims.get("userRole", String.class));
+            UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
             String nickname = claims.get("nickname", String.class);
 
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
