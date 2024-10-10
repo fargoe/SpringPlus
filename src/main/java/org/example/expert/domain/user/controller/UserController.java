@@ -1,7 +1,6 @@
 package org.example.expert.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequest;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -24,5 +23,17 @@ public class UserController {
     @PutMapping("/users")
     public void changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         userService.changePassword(authUser.getId(), userChangePasswordRequest);
+    }
+
+    // JPA 방식
+    @GetMapping("/users/search/jpa")
+    public ResponseEntity<UserResponse> getUserByNicknameJPA(@RequestParam String nickname) {
+        return ResponseEntity.ok(userService.getUserByNicknameJPA(nickname));
+    }
+
+    // JPQL 방식
+    @GetMapping("/users/search/jpql")
+    public ResponseEntity<UserResponse> getUserByNicknameJPQL(@RequestParam String nickname) {
+        return ResponseEntity.ok(userService.getUserByNicknameJPQL(nickname));
     }
 }
