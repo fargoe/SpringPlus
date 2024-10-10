@@ -34,6 +34,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // JUnit 5 엔진 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.10.2'
 
@@ -69,4 +73,13 @@ sourceSets {
 // gradle clean 시에 QClass 디렉토리 삭제
 clean {
     delete file(generated)
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = "4G"
 }
